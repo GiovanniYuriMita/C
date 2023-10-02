@@ -17,7 +17,9 @@ char* options_array[] =
     "TESOURA"
 };
 
-int main (void)
+int matchresult(char *a, const char *b);
+
+int main(void)
 {
 
     // RNG set
@@ -29,26 +31,50 @@ int main (void)
     // Getting the size of the options array from pcchoice
     int num_options_array = sizeof(options_array) / sizeof(options_array[0]);
 
-    // Print the title of the game
+    // Print Title of the Game
     printf("--- Rock Paper Scissors ---\n");
 
-    // Print the game text
+    // Print Player Options
     printf("Escolha o que vai jogar (Pedra, Papel, Tesoura): ");
-
+    
     char* userchoice = uschoice();
     
-    // Testing - printing pcchoice
+    // Printing PC Choice on Screen
     printf("The PC choice was: %s\n", pcchoice);
 
-    // Testing
+    // Printing Player Choice on Screen
     printf("The player choice was: %s\n", userchoice);
 
+    int wincount = 0;
+    int drawcount = 0;
+    int losscount = 0;
+
+    int result = matchresult(userchoice, pcchoice);
+
+    if(result == 1)
+    {
+        wincount++;
+    }
+
+    else if(result == 0)
+    {
+        drawcount++;
+    }
+
+    else
+    {
+        losscount++;
+    }
+
+    // Freeing userchoice Memory
     free(userchoice);
+
+    printf("Win count: %i\n Loss count: %i\n Draw count: %i\n", wincount, losscount, drawcount);
 
     return (0);
 }
 
-const char* pcset (void)
+const char* pcset(void)
 {
 
     // Getting the number of strings in the options_array
@@ -99,4 +125,25 @@ char* uschoice(void)
         while (1);
 
         return userchoice;
+}
+
+int matchresult(char *a, const char *b)
+{
+
+    if(strcmp(a, "PEDRA") == 0 && strcmp(b, "TESOURA") == 0 ||
+       strcmp(a, "PAPEL") == 0 && strcmp(b, "PEDRA") == 0 ||
+       strcmp(a, "TESOURA") == 0 && strcmp(b, "PAPEL") == 0)
+    {
+        return 1; // Player Win
+    }
+
+    else if(strcmp(a, b) == 0)
+    {
+        return 0; // Draw
+    }
+
+    else
+    {
+        return -1; // Player Loss
+    }
 }
